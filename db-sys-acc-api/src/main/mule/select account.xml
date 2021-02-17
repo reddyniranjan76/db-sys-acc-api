@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="8dcdba68-e6d1-412d-8d3c-4f850fb97891" >
+		<db:oracle-connection host="localhost" user="system" password="tiger" instance="xe" />
+	</db:config>
+	<flow name="select_accountFlow" doc:id="70d89e0c-da17-405c-94f2-25b37ce372e0" >
+		<logger level="INFO" doc:name="Logger" doc:id="10572636-751c-47c8-a089-2aab5193a948" message="Enter into #[flow.name]"/>
+		<db:select doc:name="Select" doc:id="648d6dca-275a-43cb-8ae5-07ef1714614f" config-ref="Database_Config">
+			<db:sql ><![CDATA[select * from PERSONS]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="ad2bb9cd-9696-4dc4-bb91-afbe7511e9ac" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="ae45c03a-983a-4ab5-be8e-fa737b6eb4a0" message="Exit from #[flow.name]"/>
+	</flow>
+</mule>
